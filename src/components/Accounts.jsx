@@ -1,20 +1,13 @@
-import React, { useState } from "react";
-import { DataGrid, GridColDef, GridValueGetterParams } from "@mui/x-data-grid";
+import React from "react";
+import { DataGrid } from "@mui/x-data-grid";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import { useSelector, useDispatch } from "react-redux";
-import { removeAccount, addAccount } from "../app/reducer";
-export const Accounts = () => {
-  const [accountNumber, setAccountNumber] = useState("");
-  const [customerName, setCustomerName] = useState("");
-  const [accountType, setAccountType] = useState("");
-  const accounts = useSelector((state) => state.accounts.accounts);
-  console.log(accounts);
-  const dispatch = useDispatch();
+import { removeAccount } from "../app/reducer";
+import { Form } from "./Form";
 
-  const accountsId = accounts?.map((object) => {
-    return object.id;
-  });
-  const maxId = Math.max(...accountsId);
+export const Accounts = () => {
+  const accounts = useSelector((state) => state.accounts.accounts);
+  const dispatch = useDispatch();
 
   const columns = [
     { field: "id", headerName: "ID", width: 70 },
@@ -43,19 +36,6 @@ export const Accounts = () => {
     },
   ];
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-
-    let new_acc = {
-      id: maxId + 1,
-      accountNumber: accountNumber,
-      customerName: customerName,
-      accountType: accountType,
-    };
-
-    dispatch(addAccount(new_acc));
-  };
-
   const handleDelete = (e, cellVal) => {
     dispatch(removeAccount(cellVal.id));
   };
@@ -63,39 +43,7 @@ export const Accounts = () => {
   return (
     <>
       <div className="w-100 d-flex justify-content-around my-5">
-        <form
-          onSubmit={handleSubmit}
-          className="d-flex flex-column align-items-center justify-content-center"
-        >
-          <label>
-            Enter Account Number:
-            <input
-              type="text"
-              className="m-4"
-              value={accountNumber}
-              onChange={(e) => setAccountNumber(e.target.value)}
-            />
-          </label>
-          <label>
-            Enter Customer Name:
-            <input
-              type="text"
-              className="m-4"
-              value={customerName}
-              onChange={(e) => setCustomerName(e.target.value)}
-            />
-          </label>
-          <label>
-            Enter Account Type:
-            <input
-              type="text"
-              className="m-4"
-              value={accountType}
-              onChange={(e) => setAccountType(e.target.value)}
-            />
-          </label>
-          <input type="submit" value="ADD" />
-        </form>
+        <Form />
         <div
           className="shadow "
           style={{ minHeight: 450, width: "600px", textAlign: "center" }}
